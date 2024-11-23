@@ -1,0 +1,23 @@
+[package]
+name = "threading-playground-rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lock-order = { path = "../lock-order"}
+
+[[bin]]
+name = "no_datarace"
+path = "src/no_datarace.rs"
+
+[[bin]]
+name = "bank_transfer_deadlock"
+path = "src/bank_transfer_deadlock.rs"
+
+[[bin]]
+name = "bank_transfer_lock_ordering"
+path = "src/bank_transfer_lock_ordering_runtime.rs"
+
+[[bin]]
+name = "bank_transfer_compile_time"
+path = "src/bank_transfer_compile_time.rs"
