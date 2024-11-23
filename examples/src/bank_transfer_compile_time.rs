@@ -20,10 +20,9 @@ enum LockTo {}
 impl LockFor<LockFrom> for HoldsLocks {
     type Data = BankAccount;
     type Guard<'l>
-        = std::sync::MutexGuard<'l, BankAccount>
+        = MutexGuard<'l, BankAccount>
     where
         Self: 'l;
-
     fn lock(&self) -> Self::Guard<'_> {
         self.from.lock().unwrap()
     }
@@ -32,10 +31,9 @@ impl LockFor<LockFrom> for HoldsLocks {
 impl LockFor<LockTo> for HoldsLocks {
     type Data = BankAccount;
     type Guard<'l>
-        = std::sync::MutexGuard<'l, BankAccount>
+        = MutexGuard<'l, BankAccount>
     where
         Self: 'l;
-
     fn lock(&self) -> Self::Guard<'_> {
         self.to.lock().unwrap()
     }
@@ -74,7 +72,8 @@ fn main() {
             let mut locked: Locked<&HoldsLocks, Unlocked> = Locked::new(state_copy.as_ref());
             println!("{:?} Started", tid);
             println!("{:?} Acquiring mutex for LockFrom", tid);
-            let (mut a, mut locked_a): (MutexGuard<BankAccount>, Locked<&HoldsLocks, LockFrom>) = locked.lock_and::<LockFrom>();
+            let (mut a, mut locked_a): (MutexGuard<BankAccount>, Locked<&HoldsLocks, LockFrom>) =
+                locked.lock_and::<LockFrom>();
             println!("{:?} Acquired mutex for LockFrom: {:?}", tid, a);
 
             println!("{:?} Acquiring mutex for LockTo", tid);
