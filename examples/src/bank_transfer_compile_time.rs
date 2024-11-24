@@ -13,27 +13,24 @@ struct HoldsLocks {
     from: Mutex<BankAccount>,
     to: Mutex<BankAccount>,
 }
-
+// Define enum type per mutex we want to hold.
+// This is pure for type system, no runtime cost!
 enum LockFrom {}
 enum LockTo {}
 
+// Connect how LockFrom interacts with `HoldsLocks.from` mutex
 impl LockFor<LockFrom> for HoldsLocks {
     type Data = BankAccount;
-    type Guard<'l>
-        = MutexGuard<'l, BankAccount>
-    where
-        Self: 'l;
+    type Guard<'l> = MutexGuard<'l, BankAccount> where Self: 'l;
     fn lock(&self) -> Self::Guard<'_> {
         self.from.lock().unwrap()
     }
 }
 
+// Connect how LockTo interacts with `HoldsLocks.to` mutex
 impl LockFor<LockTo> for HoldsLocks {
     type Data = BankAccount;
-    type Guard<'l>
-        = MutexGuard<'l, BankAccount>
-    where
-        Self: 'l;
+    type Guard<'l> = MutexGuard<'l, BankAccount> where Self: 'l;
     fn lock(&self) -> Self::Guard<'_> {
         self.to.lock().unwrap()
     }
